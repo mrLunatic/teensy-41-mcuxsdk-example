@@ -12,7 +12,9 @@
 
 #include "system_MIMXRT1062.h"
 
-#define blink_task_PRIORITY (configMAX_PRIORITIES - 1)
+#define TASK_NAME "Blink task"
+#define TASK_STACK_SIZE configMINIMAL_STACK_SIZE + 100
+#define TASK_PRIORITY (configMAX_PRIORITIES - 1)
 
 void show(uint32_t time)
 {
@@ -41,4 +43,9 @@ void blink_task(void *pvParameters)
 
         vTaskDelay(3000U / portTICK_PERIOD_MS);
     }
+}
+
+BaseType_t blink_task_start()
+{
+    return xTaskCreate(blink_task, TASK_NAME, TASK_STACK_SIZE, NULL, TASK_PRIORITY, NULL);
 }

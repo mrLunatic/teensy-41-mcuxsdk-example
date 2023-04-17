@@ -18,8 +18,7 @@ int main(void)
 
     SystemCoreClockUpdate();
 
-    if (xTaskCreate(blink_task, "Blink_task", configMINIMAL_STACK_SIZE + 100, NULL, blink_task_PRIORITY, NULL) !=
-        pdPASS)
+    if (blink_task_start() != pdPASS)
     {
         while (1)
             ;
