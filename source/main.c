@@ -1,71 +1,44 @@
-/*
- * Copyright 2019 NXP
- * All rights reserved.
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "board.h"
 
 #include "system_MIMXRT1062.h"
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-#define EXAMPLE_LED_GPIO BOARD_USER_LED_GPIO
-#define EXAMPLE_LED_GPIO_PIN BOARD_USER_LED_PIN
 
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
+volatile uint32_t g_sysTickCounter;
 
-/*******************************************************************************
- * Variables
- ******************************************************************************/
-volatile uint32_t g_systickCounter;
-
-/*******************************************************************************
- * Code
- ******************************************************************************/
 void SysTick_Handler(void)
 {
-    if (g_systickCounter != 0U)
+    if (g_sysTickCounter != 0U)
     {
-        g_systickCounter--;
+        g_sysTickCounter--;
     }
 }
 
 void SysTick_DelayTicks(uint32_t n)
 {
-    g_systickCounter = n;
-    while (g_systickCounter != 0U)
+    g_sysTickCounter = n;
+    while (g_sysTickCounter != 0U)
     {
     }
 }
 
 void show(uint32_t time)
 {
-    GPIO_PinWrite(EXAMPLE_LED_GPIO, EXAMPLE_LED_GPIO_PIN, 1U);
+    BOARD_LED_Set(1U);
     SysTick_DelayTicks(time);
 
-    GPIO_PinWrite(EXAMPLE_LED_GPIO, EXAMPLE_LED_GPIO_PIN, 0U);
+    BOARD_LED_Set(0U);
     SysTick_DelayTicks(time);
 }
 
-/*!
- * @brief Main function
- */
 int main(void)
 {
-    /* Board pin init */
     BOARD_ConfigMPU();
-    BOARD_InitBootPins();
     BOARD_InitBootClocks();
-    /* Update the core clock */
+    BOARD_InitPins();
+
     SystemCoreClockUpdate();
 
-    /* Set systick reload value to generate 1ms interrupt */
     if (SysTick_Config(SystemCoreClock / 1000U))
     {
         while (1)
