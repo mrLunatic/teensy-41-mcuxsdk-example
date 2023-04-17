@@ -1,0 +1,32 @@
+IF(NOT DEFINED FPU)  
+    SET(FPU "-mfloat-abi=hard -mfpu=fpv5-d16")  
+ENDIF()  
+
+IF(NOT DEFINED SPECS)  
+    SET(SPECS "--specs=nano.specs --specs=nosys.specs")  
+ENDIF()  
+
+IF(NOT DEFINED DEBUG_CONSOLE_CONFIG)  
+    SET(DEBUG_CONSOLE_CONFIG "-DSDK_DEBUGCONSOLE=1")  
+ENDIF()
+
+ADD_DEFINITIONS(
+    # "-D__STARTUP_CLEAR_BSS"
+    # "-D__STARTUP_INITIALIZE_NONCACHEDATA"
+    # "-DXIP_EXTERNAL_FLASH=1"
+    # "-DXIP_BOOT_HEADER_ENABLE=1"
+    # "-DCPU_MIMXRT1062DVL6A"
+    # "-DCPU_MIMXRT1062DVL6A_cm7"
+    # "-DMCUXPRESSO_SDK"
+    "-DSDK_DEBUGCONSOLE=1"
+    "-DSERIAL_PORT_TYPE_UART=1"
+    # "-DCR_INTEGER_PRINTF"
+    # "-DPRINTF_FLOAT_ENABLE=0"
+    # "-D__MCUXPRESSO"
+    # "-D__USE_CMSIS"
+    # "-DNDEBUG"
+    # "__REDLIB__"
+)
+
+include(${CMAKE_CURRENT_LIST_DIR}/Flags/FlexSpiNorDebug.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/Flags/FlexSpiNorRelease.cmake)
