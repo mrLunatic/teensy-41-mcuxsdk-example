@@ -10,7 +10,11 @@ ENABLE_LANGUAGE(ASM)
 
 SET(PROJECT_NAME "Sandbox")
 
-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
+SET(HEX_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+
+file(MAKE_DIRECTORY ${HEX_OUTPUT_PATH})
+
 # arm-none-eabi-objcopy -O ihex ./Sandbox.elf ./Sandbox.hex
 
 project(${PROJECT_NAME})
@@ -24,42 +28,39 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/board.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/clock_config.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/dcd.c
-    # ${CMAKE_CURRENT_SOURCE_DIR}/board/board.c
-    # ${CMAKE_CURRENT_SOURCE_DIR}/board/clock_config.c
-    # ${CMAKE_CURRENT_SOURCE_DIR}/board/dcd.c
     ${CMAKE_CURRENT_SOURCE_DIR}/board/pin_mux.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/main.c
-    # ${CMAKE_CURRENT_SOURCE_DIR}/source/semihost_hardfault.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/xip/evkbmimxrt1060_flexspi_nor_config.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060
-    ${CMAKE_CURRENT_SOURCE_DIR}/xip
     ${CMAKE_CURRENT_SOURCE_DIR}/board
 )
-# <sdkComponents>platform.drivers.igpio.MIMXRT1062;platform.drivers.clock.MIMXRT1062;platform.drivers.common.MIMXRT1062;device.MIMXRT1062_CMSIS.MIMXRT1062;utility.debug_console.MIMXRT1062;component.lpuart_adapter.MIMXRT1062;component.serial_manager.MIMXRT1062;component.lists.MIMXRT1062;component.serial_manager_uart.MIMXRT1062;platform.drivers.lpuart.MIMXRT1062;device.MIMXRT1062_startup.MIMXRT1062;platform.drivers.iomuxc.MIMXRT1062;platform.utilities.assert.MIMXRT1062;platform.drivers.xip_device.MIMXRT1062;platform.drivers.xip_board.evkbmimxrt1060.MIMXRT1062;CMSIS_Include_core_cm.MIMXRT1062;platform.utilities.misc_utilities.MIMXRT1062;device.MIMXRT1062_system.MIMXRT1062;evkbmimxrt1060_iled_blinky;</sdkComponents>
+
 set(CMAKE_MODULE_PATH
     ${MCUX_SDK_HOME}/core
 )
 
 include(all_devices)
 include(device_startup)
-include(driver_xip_device)
 include(driver_clock)
+include(driver_xip_device)
+include(driver_xip_board)
 include(driver_igpio)
-include(driver_lpuart)
-include(component_lists)
-include(component_serial_manager)
-include(component_lpuart_adapter)
-include(utility_assert_lite)
+include(utility_debug_console_lite)
 
 IF(NOT DEFINED TARGET_LINK_SYSTEM_LIBRARIES)  
     SET(TARGET_LINK_SYSTEM_LIBRARIES "-lm -lc -lgcc -lnosys")  
-ENDIF()  
+ENDIF()
 
 TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--start-group)
 
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE ${TARGET_LINK_SYSTEM_LIBRARIES})
 
 TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--end-group)
+
+add_custom_command(TARGET ${MCUX_SDK_PROJECT_NAME} POST_BUILD
+    COMMAND arm-none-eabi-objcopy -O ihex ${CMAKE_CURRENT_BINARY_DIR}/bin/${PROJECT_NAME}.elf ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}.hex
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Generating hex"
+)
