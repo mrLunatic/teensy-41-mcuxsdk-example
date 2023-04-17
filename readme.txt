@@ -5,6 +5,6 @@ Steps:
 2. Set env variable MCUX_SDK_HOME to root of mcuxsdk project (contains core, examples, middleware and other projects)
 3. Install arm-none-eabi-gcc (tested on 12.2.1)
 4. Clone this repo
-5. Run 'prepare.sh' script
-6. Run 'build.sh' script
+5. Run 'prepare.sh' script (or run 'cmake -B ./build .' manually)
+6. Run 'build.sh' script (or run 'cmake --build ./build' manually)
 7. Flash ./bin/Sandbox.hex by teensy utility
