@@ -15,8 +15,6 @@ SET(HEX_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 file(MAKE_DIRECTORY ${HEX_OUTPUT_PATH})
 
-# arm-none-eabi-objcopy -O ihex ./Sandbox.elf ./Sandbox.hex
-
 project(${PROJECT_NAME})
 
 set(MCUX_SDK_PROJECT_NAME ${PROJECT_NAME}.elf)
@@ -28,6 +26,7 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/board.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/clock_config.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/dcd.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/app/tasks/blinkTask.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pin_mux.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
 )
@@ -48,6 +47,8 @@ include(driver_xip_device)
 include(driver_xip_board)
 include(driver_igpio)
 include(utility_debug_console_lite)
+include(middleware_freertos-kernel_MIMXRT1062)
+include(middleware_freertos-kernel_heap_4)
 
 IF(NOT DEFINED TARGET_LINK_SYSTEM_LIBRARIES)  
     SET(TARGET_LINK_SYSTEM_LIBRARIES "-lm -lc -lgcc -lnosys")  
