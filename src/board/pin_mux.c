@@ -1,7 +1,8 @@
 #include "fsl_common.h"
 #include "fsl_iomuxc.h"
 #include "fsl_gpio.h"
-#include "pin_mux.h"
+
+#include "board/pin_mux.h"
 
 #define LED_GPIO GPIO2
 #define LED_GPIO_PIN 3

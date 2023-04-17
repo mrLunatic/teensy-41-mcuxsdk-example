@@ -28,13 +28,13 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/board.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/clock_config.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/dcd.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/board/pin_mux.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pin_mux.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060
-    ${CMAKE_CURRENT_SOURCE_DIR}/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 set(CMAKE_MODULE_PATH
