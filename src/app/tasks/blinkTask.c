@@ -12,6 +12,8 @@
 
 #include "system_MIMXRT1062.h"
 
+#include "fsl_debug_console.h"
+
 #define TASK_NAME "Blink task"
 #define TASK_STACK_SIZE configMINIMAL_STACK_SIZE + 100
 #define TASK_PRIORITY (configMAX_PRIORITIES - 1)
@@ -29,6 +31,8 @@ void blink_task(void *pvParameters)
 {
     while (true)
     {
+        PRINTF("SOS\n");
+        
         show(70u);
         show(70u);
         show(70u);
