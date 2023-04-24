@@ -1,2 +1,2 @@
-# config to select component, the format is CONFIG_USE_${component}
+# configure current MCU
 set(MCUX_DEVICE "MIMXRT1062")
