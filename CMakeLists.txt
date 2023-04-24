@@ -5,7 +5,6 @@ SET(CMAKE_TOOLCHAIN_FILE "${MCUX_SDK_HOME}/core/tools/cmake_toolchain_files/armg
 
 SET(CMAKE_BUILD_TYPE "flexspi_nor_release")
 
-# ENABLE ASM
 ENABLE_LANGUAGE(ASM)
 
 SET(PROJECT_NAME "Sandbox")
@@ -26,9 +25,9 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/board.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/clock_config.c
     ${MCUX_SDK_HOME}/core/boards/evkmimxrt1060/dcd.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/app/tasks/blinkTask.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/board/pin_mux.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/app/blinkTask.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/teensy.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
